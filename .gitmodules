@@ -1,0 +1,3 @@
+[submodule "fv-lib-lilypond"]
+	path = fv-lib-lilypond
+	url = https://github.com/fv-c/fv-lib-lilypond.git
