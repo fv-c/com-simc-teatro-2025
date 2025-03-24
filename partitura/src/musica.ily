@@ -6,6 +6,7 @@
 \include "../../fv-lib-lilypond/custom-spanners.ily"
 
 global = {
+  \tempo "Indomito!" 4 = 118
   s1
 }
 
@@ -17,7 +18,21 @@ text = \relative c' {
                                       )
                                     )
   \clef alto
-  R1
+  s1 s2 \break
+  \once \override TextSpanner.after-line-breaking = #(lambda (grob) 
+                                                       (let* 
+                                                        (
+                                                          (stil (ly:grob-property grob 'stencil))
+                                                          (stilExt (ly:stencil-extent stil X))
+                                                          (stilLength (interval-length stilExt))
+                                                          (newStil (box-stencil (grob-interpret-markup grob #{ \markup \with-color #white \filled-box #(cons 0 stilLength) #'(0 . 3) #0 #}) 0.1 0))
+                                                          (textStil (grob-interpret-markup grob #{ \markup "f1" #}))
+                                                          (fullStil (ly:stencil-add newStil (center-stencil-on-stencil newStil textStil)))
+                                                          ) 
+                                                        (ly:grob-set-property! grob 'stencil fullStil)
+                                                        )
+                                                       )
+  s2\startTextSpan s2. s4\stopTextSpan
 }
 
 guitar = \relative c' {
@@ -26,22 +41,10 @@ guitar = \relative c' {
   \set stringNumberOrientations = #'(left)
   \set fingeringOrientations = #'(left)
   \clef G
-  \once
-  \once \override TextSpanner.minimum-length = #10
-  %\once \override TextSpanner.bound-details.left.stencil-align-dir-y = #0.4
-  %\once \override TextSpanner.bound-details.right.stencil-align-dir-y = #-0.2
-  \once \override TextSpanner.style = #'line
-  \once \override TextSpanner.bound-details.right.arrow = ##t
-  %\once \override TextSpanner.bound-details.right.stencil-align-dir-y = #CENTER
-  %\once \override TextSpanner.bound-details.left.stencil-align-dir-y = #CENTER
-  % \override TextSpanner.bound-details.right.Y = #2
-  \once \override TextSpanner.bound-details.left.text = \markup { \musicglyph "scripts.stopped" " "}
-  \once \override TextSpanner.bound-details.right.text = \markup { \musicglyph "scripts.open"}
-  \once \override TextSpanner.bound-details.left-broken.text = \markup \null
-  \once \override TextSpanner.bound-details.right-broken.text = \markup \null
+  \clop
   \log \afterGrace 15/16 <e, a d g b e>4\startTextSpan\dal-niente { s32\stopTextSpan } 
-  \tuplet 3/2 { e'''16[(\accent\sfz  cis b) } \tuplet 3/2 { b16( fis e)] }
-  \tuplet 6/4 { fis16([ b,) cis( d,) \tuplet 3/2 { \xNotesOn fis,\staccato f\staccato e]\staccato \xNotesOff } }
+  \tuplet 3/2 { e'''16[(\accent\sfz^\tapping  cis b) } \tuplet 3/2 { b16(^\tapping fis e)] }
+  \tuplet 6/4 { fis16([^\tapping b,) cis(^\tapping d,) \palmmute \tuplet 3/2 { fis,\staccato\startTextSpan _\markup\italic\tiny"(rit.)" f\staccato e]\staccato\stopTextSpan } }
   <<
     {\voiceOne
      \arpeggioArrowUp
@@ -50,23 +53,27 @@ guitar = \relative c' {
     }
     \new Voice { \voiceTwo
                  \once \hide Stem
-                 \pitchedTrill b8\accent^\startTrillSpan\glissando\> cis s16
+                 \opcl
+                 \pitchedTrill b8\accent^\startTrillSpan\startTextSpan\glissando\> cis s16
                  \once \hide Stem
-                 \parenthesize gis16\pp \breathe
+                 \parenthesize gis16\pp\stopTextSpan \breathe
     }
   >> \oneVoice
+  \once \hide Stem
+  \clop
+  \pitchedTrill b4\startTrillSpan\startTextSpan\< cis \opcl \afterGrace 15/16 s4\stopTextSpan\startTextSpan\> { s32\stopTextSpan\! }
   
 }
 
 guitarPart = \new Staff = "guitar_staff" \with {
-  instrumentName = "Chitarra elettrica"
+  instrumentName = \markup \general-align #Y #0 \right-column {"Chitarra" "elettrica"}
   \remove "Time_signature_engraver"
   \remove "Bar_engraver"
   \consists "Bar_number_engraver"
 } << \guitar \global >>
 
 textPart = \new Staff = "text_staff" \with {
-  instrumentName = "Voce recitante"
+  instrumentName = \markup \general-align #Y #0 \right-column {"Voce" "recitante"}
   \remove "Time_signature_engraver"
   \consists "Bar_number_engraver"
 } << \text \global >>

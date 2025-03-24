@@ -33,7 +33,7 @@
     inner-margin = 2.5\cm
     outer-margin = 2\cm
 
-    indent = 3\cm
+    indent = 1.5\cm
     short-indent = 0.3\cm
 
     system-system-spacing.basic-distance = #10
