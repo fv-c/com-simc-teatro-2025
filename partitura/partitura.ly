@@ -14,7 +14,7 @@
 \include "src/note.ily"
 \include "src/midi.ily"
 
-#(set-global-staff-size 20)
+#(set-global-staff-size 18)
  
 \book {
   \paper {
