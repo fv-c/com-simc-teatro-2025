@@ -34,12 +34,12 @@
     outer-margin = 2\cm
 
     indent = 1.5\cm
-    short-indent = 0.3\cm
+    short-indent = 0\cm
 
-    system-system-spacing.basic-distance = #10
+    system-system-spacing.basic-distance = #15
     top-system-spacing.basic-distance = #8
 
-    max-systems-per-page = 2
+    %max-systems-per-page = 2
     
     system-separator-markup = \slashSeparator
 
