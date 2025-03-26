@@ -17,6 +17,7 @@ global = {
   s4.\break
   s8 s2.. s8 s2\break
   s1 s4 \break
+  s1 \break
   s4^\markup "test"
 }
 
@@ -70,7 +71,43 @@ text = \relative c' {
   \once \override TextSpanner.outside-staff-priority = ##f
   \once \override TextSpanner.Y-offset = #-1.5
   \once \override TextSpanner.layer = #999
-  s2\startTextSpan s2... s16\stopTextSpan
+  s2\startTextSpan s2... s16\stopTextSpan s8
+  s1 s4
+  \once \override TextSpanner.after-line-breaking = #(lambda (grob) 
+                                                       (let* 
+                                                        (
+                                                          (stil (ly:grob-property grob 'stencil))
+                                                          (stilExt (ly:stencil-extent stil X))
+                                                          (stilLength (interval-length stilExt))
+                                                          (newStil (box-stencil (grob-interpret-markup grob #{ \markup \with-color #white \filled-box #(cons 0 stilLength) #'(0 . 3) #0 #}) 0.1 0))
+                                                          (textStil (grob-interpret-markup grob #{ \markup \upright "f3◼: mi guardo intorno..." #}))
+                                                          (fullStil (ly:stencil-add newStil (center-stencil-on-stencil newStil textStil)))
+                                                          ) 
+                                                        (ly:grob-set-property! grob 'stencil fullStil)
+                                                        )
+                                                       )
+  \once \override TextSpanner.outside-staff-priority = ##f
+  \once \override TextSpanner.Y-offset = #-1.5
+  \once \override TextSpanner.layer = #999
+  s4\startTextSpan s4\stopTextSpan 
+  \once \override TextSpanner.after-line-breaking = #(lambda (grob) 
+                                                       (let* 
+                                                        (
+                                                          (stil (ly:grob-property grob 'stencil))
+                                                          (stilExt (ly:stencil-extent stil X))
+                                                          (stilLength (interval-length stilExt))
+                                                          (newStil (box-stencil (grob-interpret-markup grob #{ \markup \with-color #white \filled-box #(cons 0 stilLength) #'(0 . 3) #0 #}) 0.1 0))
+                                                          (textStil (grob-interpret-markup grob #{ \markup \upright "e pur condividendo... ...come lava bollente" #}))
+                                                          (fullStil (ly:stencil-add newStil (center-stencil-on-stencil newStil textStil)))
+                                                          ) 
+                                                        (ly:grob-set-property! grob 'stencil fullStil)
+                                                        )
+                                                       )
+  \once \override TextSpanner.outside-staff-priority = ##f
+  \once \override TextSpanner.Y-offset = #-1.5
+  \once \override TextSpanner.layer = #999
+  \afterGrace 15/16 s2\startTextSpan {s32\stopTextSpan}
+  s4
 }
 
 guitar = \relative c' {
@@ -99,7 +136,7 @@ guitar = \relative c' {
   >> \oneVoice
   \once \hide Stem
   \clopcl
-  \pitchedTrill b4\startTrillSpan\startTextSpan\< cis \afterGrace 15/16 s4\> { s32\stopTextSpan\! }
+  \pitchedTrill b4\-\startTrillSpan\startTextSpan\< cis \afterGrace 15/16 s4\> { s32\stopTextSpan\! }
   \clopcl s16\startTextSpan\< s16\> s16\!\stopTextSpan s16
   \clopcl s16\startTextSpan\< s16\> s16\!\stopTextSpan s16_\markup\italic"nervoso! (continua, plettrata ad libitum)"
   s2
@@ -116,6 +153,13 @@ guitar = \relative c' {
   \clop
   \log <e, a d g b e>8\startTextSpan\dal-niente
   \tuplet 3/2 { e'''16[(\accent\sfz^\tapping\stopTextSpan  cis b) } \tuplet 3/2 { b16(^\tapping fis e)] }
+  \tuplet 6/4 { fis16([^\tapping b,) cis(^\tapping d,) g( a,)] }
+  \pitchedTrill b4\startTrillSpan cis
+  fis''32([\stopTrillSpan b,) cis( d,) fis'( b,) cis( d,])
+  \slash-on \grace { g16( a,)} \slash-off \opcl \pitchedTrill b4^\accent\>\-\startTrillSpan\startTextSpan cis
+  s4\pp\stopTrillSpan\stopTextSpan
+  \once \hide Stem \clopcl \pitchedTrill b8\-\<\startTrillSpan\startTextSpan cis! s8\> s4\!\stopTrillSpan\stopTextSpan s4\<
+  s4\!
 }
 
 guitarPart = \new Staff = "guitar_staff" \with {

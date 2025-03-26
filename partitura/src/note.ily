@@ -44,5 +44,7 @@ note = \markuplist {
     \vspace #1
     \line { \large \concat { " "\musicglyph #"scripts.ushortfermata" "  " \musicglyph #"scripts.ufermata" "  " \musicglyph #"scripts.ulongfermata" "  Corone, dalla più breve alla più lunga." } }
     \vspace #1
+    \line \large { "◼ ◻ ◧ : Indicazioni di \"intenzione\" della recitazione, dalla più violenta e irritata a quella più piatta." }
+    \vspace #1
     \large\justify-string#"Altre indicazioni tecniche sono riportate, in partitura e nelle parti, nelle note a piè di pagina."
 }
